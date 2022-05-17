@@ -1,0 +1,36 @@
+{
+    "coffee":[
+        {
+            "name": "Flat white",
+            "quantity": 1000
+        },
+        {
+            "name": "Americano",
+            "quantity": 1000
+        },
+        {
+            "name": "Macchiato",
+            "quantity": 120
+        },
+        {
+            "name": "Cappuccino",
+            "quantity": 120
+        },
+        {
+            "name": "Con Panna",
+            "quantity": 120
+        },
+        {
+            "name": "Mocha",
+            "quantity": 120
+        },
+        {
+            "name": "Caramel Macchiato",
+            "quantity": 120
+        }
+    ],
+    "topping":[
+        
+    ]
+
+}
