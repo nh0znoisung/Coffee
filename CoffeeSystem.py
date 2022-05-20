@@ -9,14 +9,8 @@ from GetData import *
 from PrintProductVisitor import *
 from contextlib import contextmanager
 import sys, os
+from ErrorChecker import *
 
-class InvalidInput(Exception):
-    def __init__(self,msg):
-	    # msg:string
-        self.s = msg
-
-    def __str__(self):
-        return "Invalid Input: " + self.s +"\n"
 
 # Silent mode
 @contextmanager
@@ -48,6 +42,7 @@ class CoffeeSystem:
         self.cart = []
         self.data = None
         self.file_mode = False
+        self.file = None
 
     def getNextLine(self):
         txt = self.file.readline()
@@ -72,8 +67,8 @@ class CoffeeSystem:
             coffee_quantity = int(input(colored('How many coffee do you want? ', 'blue', attrs=['blink']))) if self.file_mode == False else self.getNextLine()
             if checkRangeInteger(coffee_quantity, low, high):
                 return int(coffee_quantity)
-            elif int(coffee_quantity) < low or int(coffee_quantity) > high:
-                raise ValueError('Out of range!')
+            # elif int(coffee_quantity) < low or int(coffee_quantity) > high:
+            #     raise OutOfRange('Your input is out of range!')
             else:
                 if self.file_mode:
                     raise InvalidInput('Your input is not valid!')
@@ -83,7 +78,7 @@ class CoffeeSystem:
         for coffee in self.data['coffee']:
             if coffee['id'] == id:
                 return coffee.copy()
-        return None
+        raise NoItem()
 
     def getToppingInput(self) -> int:
         while True:
@@ -105,15 +100,15 @@ class CoffeeSystem:
         for topping in self.data['topping']:
             if topping['id'] == topping_id:
                 return topping.copy(), True
-        return None
+        raise NoItem()
 
     def getToppingQuantity(self, low: int, high: int, coffee_quantity: int) -> int:
         while True:
             topping_quantity = int(input(colored('How many topping do you want? ', 'blue', attrs=['blink']))) if self.file_mode == False else self.getNextLine()
-            if checkRangeInteger(topping_quantity*coffee_quantity , low, high):
+            if checkRangeInteger(topping_quantity , low/coffee_quantity, high/coffee_quantity):
                 return int(topping_quantity)
-            elif int(topping_quantity)*coffee_quantity < low or int(topping_quantity)*coffee_quantity > high:
-                raise ValueError('Out of range!')
+            # elif int(topping_quantity)*coffee_quantity < low or int(topping_quantity)*coffee_quantity > high:
+            #     raise OutOfRange('Your input is out of range!')
             else:
                 if self.file_mode:
                     raise InvalidInput('Your input is not valid!')

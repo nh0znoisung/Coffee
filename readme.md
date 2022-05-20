@@ -1,3 +1,8 @@
+## Introduction
+This is a simple console app for customer. 2 mode: Run by directly interact with customer and run by read file for testing. This console app with colorful 
+
+
+
 ## Usage
 ### Requirements
 + `Python` >= 3.8.10

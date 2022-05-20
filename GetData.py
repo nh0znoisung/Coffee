@@ -1,4 +1,5 @@
 import json
+from ErrorChecker import *
 
 FILE_DATA = 'data.json'
 
@@ -14,10 +15,7 @@ def dataPreprocessing(data: dict) -> list:
     return list(map(lambda x: (x['id'], x['name'], x['quantity'], x['price']), data))
 
 def checkRangeInteger(txt: str, low: int, high: int)->bool:
-    try:
-        num = int(txt)
-        if num < low or num > high:
-            return False
-        return True
-    except:
-        return False
+    num = int(txt)
+    if num < low or num > high:
+        raise OutOfRange('Your input is out of range!')
+    return True
