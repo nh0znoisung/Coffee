@@ -7,9 +7,16 @@ from BillExport import BillExport
 from PrintLibrary import *
 from GetData import *
 from PrintProductVisitor import *
-
 from contextlib import contextmanager
 import sys, os
+
+class InvalidInput(Exception):
+    def __init__(self,msg):
+	    # msg:string
+        self.s = msg
+
+    def __str__(self):
+        return "Invalid Input: " + self.s +"\n"
 
 # Silent mode
 @contextmanager
@@ -33,6 +40,15 @@ class CoffeeSystem:
             self.file_mode = True
             self.file = open(filename, "r")
 
+    def __del__(self):
+        if self.file_mode:
+            self.file.close()
+        StatusVisitor.cas = None
+        StatusVisitor.is_disable = True
+        self.cart = []
+        self.data = None
+        self.file_mode = False
+
     def getNextLine(self):
         txt = self.file.readline()
         if txt == '':
@@ -46,7 +62,10 @@ class CoffeeSystem:
             coffee_id = input(colored('Please choose your coffee! [{}-{}]:  '.format(low,high), 'blue', attrs=['blink'])) if self.file_mode == False else self.getNextLine()
             if checkRangeInteger(coffee_id, low, high):
                 return int(coffee_id)
-            cprint("Your input is not valid! Please try again", 'red')
+            else:
+                if self.file_mode:
+                    raise InvalidInput('Your input is not valid!')
+                cprint("Your input is not valid! Please try again", 'red')
 
     def getCoffeeQuantity(self, low: int, high: int) -> int:
         while True:
@@ -55,7 +74,10 @@ class CoffeeSystem:
                 return int(coffee_quantity)
             elif int(coffee_quantity) < low or int(coffee_quantity) > high:
                 raise ValueError('Out of range!')
-            cprint("Your input is not valid! Please try again", 'red')
+            else:
+                if self.file_mode:
+                    raise InvalidInput('Your input is not valid!')
+                cprint("Your input is not valid! Please try again", 'red')
 
     def getCoffeeById(self, id: str) -> dict:
         for coffee in self.data['coffee']:
@@ -69,7 +91,10 @@ class CoffeeSystem:
             topping_id = input(colored('Please choose your topping! [{}-{}]:  '.format(low,high), 'blue', attrs=['blink'])) if self.file_mode == False else self.getNextLine()
             if checkRangeInteger(topping_id, low, high):
                 return int(topping_id)
-            cprint("Your input is not valid! Please try again", 'red')
+            else:
+                if self.file_mode:
+                    raise InvalidInput('Your input is not valid!')
+                cprint("Your input is not valid! Please try again", 'red')
 
     def getToppingById(self, coffee, topping_id) -> dict:
         # If already have in coffee's topping, just return the actual one
@@ -89,7 +114,10 @@ class CoffeeSystem:
                 return int(topping_quantity)
             elif int(topping_quantity)*coffee_quantity < low or int(topping_quantity)*coffee_quantity > high:
                 raise ValueError('Out of range!')
-            cprint("Your input is not valid! Please try again", 'red')
+            else:
+                if self.file_mode:
+                    raise InvalidInput('Your input is not valid!')
+                cprint("Your input is not valid! Please try again", 'red')
 
     def isToppingContinue(self):
         while True:
@@ -99,6 +127,8 @@ class CoffeeSystem:
             elif is_topping_continue.upper() == 'N':
                 return False
             else:
+                if self.file_mode:
+                    raise InvalidInput('Your input is not valid!')
                 cprint("Your input is not valid! Please try again", 'red')
 
     def isCoffeeContinue(self):
@@ -109,6 +139,8 @@ class CoffeeSystem:
             elif is_coffee_continue.upper() == 'N':
                 return False
             else:
+                if self.file_mode:
+                    raise InvalidInput('Your input is not valid!')
                 cprint("Your input is not valid! Please try again", 'red')
 
     def calcCartTotal(self, cart: list) -> float:
@@ -126,7 +158,10 @@ class CoffeeSystem:
             phone_number = input(colored('Please enter your phone number: ', 'blue', attrs=['blink'])) if self.file_mode == False else self.getNextLine()
             if phone_number.isdigit():
                 return phone_number
-            cprint("Your input is not valid! Please try again", 'red')
+            else:
+                if self.file_mode:
+                    raise InvalidInput('Your input is not valid!')
+                cprint("Your input is not valid! Please try again", 'red')
 
     ### Send Staus Order
     def isSendStatusOrder(self):
@@ -137,12 +172,16 @@ class CoffeeSystem:
             elif is_send_status.upper() == 'N':
                 return False
             else:
+                if self.file_mode:
+                    raise InvalidInput('Your input is not valid!')
                 cprint("Your input is not valid! Please try again", 'red')
 
     def chooseMethodExportStatus(self):
         while True:
             method_export = input(colored('Please choose method send (Telegram/Zalo/Messenger) [T/Z/M]: ', 'blue', attrs=['blink'])) if self.file_mode == False else self.getNextLine()
             if method_export.upper() not in ['T','Z','M']:
+                if self.file_mode:
+                    raise InvalidInput('Your input is not valid!')
                 cprint("Your input is not valid! Please try again", 'red')
             else:
                 chatapp_instance, chatapp_strategy = None, None
@@ -172,12 +211,16 @@ class CoffeeSystem:
             elif is_print_bill.upper() == 'N':
                 return False
             else:
+                if self.file_mode:
+                    raise InvalidInput('Your input is not valid!')
                 cprint("Your input is not valid! Please try again", 'red')
 
     def chooseMethodPrint(self):
         while True:
             method_print = input(colored('Please choose method print (Printer/Telegram/Zalo/Messenger) [P/T/Z/M]: ', 'blue', attrs=['blink'])) if self.file_mode == False else self.getNextLine()
             if method_print.upper() not in ['P','T','Z','M']:
+                if self.file_mode:
+                    raise InvalidInput('Your input is not valid!')
                 cprint("Your input is not valid! Please try again", 'red')
             else:
                 export_instance, export_strategy = None, None
@@ -268,7 +311,12 @@ class CoffeeSystem:
         
 
 
-(data, cart, total_price) = CoffeeSystem('demofile.txt').run()
-print(data, '\n\n\n')
-print(cart)
-print(total_price)
+if __name__ == "__main__":
+    ### Run manually
+    CoffeeSystem().run()
+
+    ### Run from file
+    # (data, cart, total_price) = CoffeeSystem('Testcases/_demofile.txt').run()
+    # print(data, '\n')
+    # print(cart, '\n')
+    # print(total_price)
