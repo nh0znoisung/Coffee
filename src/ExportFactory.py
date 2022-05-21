@@ -9,14 +9,14 @@ class ExportFactory:
 
 @dataclass
 class PrinterFactory(ExportFactory):
-    instance = None
+    __instance = None
 
     # Singleton
     @staticmethod
     def getInstance():
-        if PrinterFactory.instance == None:
-            PrinterFactory.instance = PrinterFactory()
-        return PrinterFactory.instance
+        if PrinterFactory.__instance == None:
+            PrinterFactory.__instance = PrinterFactory()
+        return PrinterFactory.__instance
     
     def createStrategy(self):
         return PrinterStrategy()
@@ -26,39 +26,39 @@ class ChatappFactory(ExportFactory): pass
 
 @dataclass
 class TelegramFactory(ChatappFactory):
-    instance = None
+    __instance = None
     # Singleton
     @staticmethod
     def getInstance():
-        if TelegramFactory.instance == None:
-            TelegramFactory.instance = TelegramFactory()
-        return TelegramFactory.instance
+        if TelegramFactory.__instance == None:
+            TelegramFactory.__instance = TelegramFactory()
+        return TelegramFactory.__instance
 
     def createStrategy(self, phone_number: str):
         return TelegramStrategy(phone_number)
 
 @dataclass
 class ZaloFactory(ChatappFactory):
-    instance = None
+    __instance = None
     # Singleton
     @staticmethod
     def getInstance():
-        if ZaloFactory.instance == None:
-            ZaloFactory.instance = ZaloFactory()
-        return ZaloFactory.instance
+        if ZaloFactory.__instance == None:
+            ZaloFactory.__instance = ZaloFactory()
+        return ZaloFactory.__instance
     
     def createStrategy(self, phone_number: str):
         return ZaloStrategy(phone_number)
 
 @dataclass
 class MessengerFactory(ChatappFactory):
-    instance = None
+    __instance = None
     # Singleton
     @staticmethod
     def getInstance():
-        if MessengerFactory.instance == None:
-            MessengerFactory.instance =  MessengerFactory()
-        return MessengerFactory.instance
+        if MessengerFactory.__instance == None:
+            MessengerFactory.__instance =  MessengerFactory()
+        return MessengerFactory.__instance
     
     def createStrategy(self, id: str):
         return MessengerStrategy(id)
