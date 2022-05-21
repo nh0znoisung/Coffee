@@ -1,7 +1,7 @@
 import json
 from ErrorChecker import *
 
-FILE_DATA = 'data.json'
+FILE_DATA = './data.json'
 
 def getData(filename: str)-> dict:
     # Open file and read data

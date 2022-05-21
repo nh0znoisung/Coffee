@@ -1,7 +1,11 @@
-import unittest
-from CoffeeSystem import CoffeeSystem, InvalidInput, OutOfRange, NoItem
+import unittest, sys
+
+sys.path.append('../src/')
 
 TESTCASE_DIR = "Testcases/"
+
+from CoffeeSystem import CoffeeSystem, InvalidInput, OutOfRange, NoItem
+
 
 def getCoffeeSystem(file_idx: int):
     return CoffeeSystem(TESTCASE_DIR + str(file_idx) + '.txt').run()
