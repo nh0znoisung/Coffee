@@ -71,27 +71,6 @@ class StartTimer(Visitor):
         return timer
     
 
-# def sendStatusPending():
-#     print(STATUS_PENDING_MESSAGE)
-
-# def sendStatusProcessing():
-#     print(STATUS_PROCESSING_MESSAGE)
-
-# def sendStatusComplete():
-#     print(STATUS_COMPLETE_MESSAGE)
-
-
-# def sendStatus():        # Polymorphism
-
-#     time_pending = Timer(DELAY_PENDING, sendStatusPending)
-#     time_processing = Timer(DELAY_PROCESSING, sendStatusProcessing)
-#     time_complete = Timer(DELAY_COMPLETE, sendStatusComplete)
-    
-    
-#     time_pending.start() 
-#     time_processing.start() 
-#     time_complete.start() 
-
 timer_pending, timer_processing, timer_complete = None, None, None
 
 # after the delay seconds, Message will be printed
@@ -113,14 +92,3 @@ def cancelStatus():
     timer_pending.cancel()
     timer_processing.cancel()
     timer_complete.cancel()
-
-# is_disable + print_method (printer, chatapp: ....)
-
-# sendStatus()
-# while True:
-#     x = input("Chào cậu, nhập gì đó đi nào:   ")
-#     if x == '1':
-#         IS_DISABLE = True
-#     else:
-#         IS_DISABLE = False
-#     print(x)

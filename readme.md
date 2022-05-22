@@ -1,6 +1,6 @@
 ## Introduction
 This is a simple `console app` for customer in order to use the Coffee System service (such as buy coffee with more topping, print bill, send order status,...) by Code with Me. This colorful console app written by `Python3` and run well on `Linux` OS. The system is designed with 2 mode. The first one is normal when the user (customer) can interact directly with program via the command line instruction and the second one is read the already file for testing. Due to the simple of this app, there is no `Database System` at all, the data just initializes manually and store in a json file. Hope you enjoy and have fun :).
-
+![](images/intro.png)
 ## Usage
 ### Requirements
 + `Python` >= 3.8.10
@@ -43,7 +43,22 @@ In this assignment, I will try to integrate 4 Design Pattern in order to make my
 
 #### Application
 At first, we see on structure and function of `Export Factory`, for example the class `PrinterFactory`, we just only use this instace of class to indirectly generate the `PrinterStrategy` and doesn't have any responsibilities for stroing some special attributes for each instance, so that we need only create one instance in its lifecycle. This is the big chance we can apply the **Singleton Design Pattern** to this class. In addition, we can do the same with other classes `TelegramFactory`, `MessenerFactory`,...
-![](/images/singleton-code.png)
+![](/images/singleton-class.png)
+```Python
+class PrinterFactory(ExportFactory):
+    __instance = None
+
+    # Singleton
+    @staticmethod
+    def getInstance():
+        if PrinterFactory.__instance == None:
+            PrinterFactory.__instance = PrinterFactory()
+        return PrinterFactory.__instance
+    
+    def createStrategy(self):
+        return PrinterStrategy()
+```
+
 
 ### Visitor
 #### Introduction
@@ -63,8 +78,9 @@ The Visitor pattern suggests that we place the new behavior into a separate clas
 ![](images/visitor-structure.png)
 
 #### Application
-????? Flowchart
+In sending status feature, we can apply the `Visitor` design pattern into it. At first, we have 3 creator classes which are 3 pharses of order's status including: **Pending, Processing, Complete**. We have a interface class of them is Status which is associate with Visitor and have a method accept() to apply Visitor. Now, we have 3 feature: **PrintStatus, CreateTimer, StartTimer**. We create 3 classes which is the subclass of **Visitor** corresponding with 3 features. In normal ways, in Visitor class we will have 3 sub-method visit in order to visit 3 Element of Status such as visitStatusPending,... But in this project, just a small-scale and some action will have the same behaviour with some elements, we can use combile all of them into one method and use `type(x)` is the sign that we can use conditional flow to handle each element.
 
+![](images/visitor-class.png)
 
 
 ### Strategy
@@ -80,7 +96,8 @@ To overcome this problem, `Strategy` design pattern can help us to extract all o
 - Declare the strategy interface common to all variants of the algorithm, extract all algorithms into their own classes. We should implement the strategies interface.
 - Client of context must choose suitable strategy that matches the way we expect the context to perform.
 #### Application
-??? Class Diagram
+In the export feature in order to print bill, we can apply **Strategy design pattern** into it. Since *print bill* function can print directly to `printer` or send bill to chatapp including `Telegram, Zalo, Messenger`. In the future, we expect to upgrade more functionality (for example: not only print to console, but also call Telegram API and send to real customer's data) or add more features (for example: QR code, whatapps,...) still not affect and change the code-base of other classes. We can do the same logic with `print_status_order` method in ChatappStrategy.
+![](images/strategy-diagram.png)
 
 ### Factory method
 #### Introduction
@@ -95,7 +112,8 @@ For exmaple, when we have an app for logistics management. At first, our codes j
 - Create a set of creator subclasses for each type of product listed in the factory method. Override the factory method in the subclasses and extract the appropriate bits of construction code from the base method.
 
 #### Application
-???? Class diagram
+In export feature, we can add **Factory Design pattern** into it. Our aim to create a class that can create an object in a superclass and subclasses can return the ype of objects will be created. Now, we expect to return `Export Strategies` object but corressponding with each type of Factory, it will return the subclass Export Strategies that it want. Apart from it, we can take full advantages by using Export Strategies to be a product of this Factory Design pattern. 
+![](images/factory-class.png)
 
 
 ## Flowchart
@@ -116,7 +134,7 @@ In Python case, these are some recommendation about naming covention for this pr
 - **Other names** need to write as `lowercase_separated_by_underscores`
 - **Private attributes** need to write with the prefix is 1 or 2 underscores such as `__instance`, `_instance`,... Prefix with double underscores or more changes the behaviour in classes regarding to [Name mangling](https://en.wikipedia.org/wiki/Name_mangling#Python). Moreover, prefix and postfix with double underscores are indented as `Magic names` which fulfill special behaviour in Python object, *for example*, `__add__` can use by syntax **obj1.__add__(obj2)** or **obj1 + obj2**.
 - Always use `self` for first argument to instance methods. While we always use `cls` for first argument to class methods.
-- **Function/Variable/Package/Module** name should write as `snake-case`, all-lowercases, short.
+- **Function/Variable/Package/Module** name should write as `snake-case`, all-lowercases, short. Apart from it, *Function* name should start by a verb.
 
 ## Demo => Video
 
@@ -143,12 +161,7 @@ Timer
 
 ## Future improvement
 + We can extend the instruction, such as enter `Q` to quit the program instantly, enter `H` for showing the instruction, enter `C` to show all the customer's cart up to now,...
-+ Interact with real application, call API of Messenger, Telegram, Zalo to send order status when it complete or prinNot test => Print true or false
-
-Chưa check phone number
-
-Cai Id phải là int 
-t bill.
++ Interact with real application, call API of Messenger, Telegram, Zalo to send order status when it complete.
 + Add the payment function, check and call API for thrid party or bank for paying the cart 
 + Data is can fetch/update from the Database Management System.
 
@@ -157,3 +170,5 @@ t bill.
 + https://refactoring.guru/design-patterns
 + https://peps.python.org/pep-0008/#function-and-variable-names
 + https://en.wikipedia.org/wiki/Naming_convention_(programming)
++ https://codelearn.io/sharing/lam-quen-voi-unittest-trong-python
++ https://semaphoreci.com/community/tutorials/getting-started-with-mocking-in-python
