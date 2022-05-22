@@ -1,6 +1,6 @@
 from dataclasses import dataclass
-from PrintLibrary import *
-from GetData import *
+from print_library import *
+from data_preprocessing import *
 
 class Print:
     def accept(self, visitor):

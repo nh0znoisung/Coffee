@@ -1,5 +1,5 @@
 import json
-from ErrorChecker import *
+from error_checker import *
 
 FILE_DATA = './data.json'
 
@@ -10,9 +10,6 @@ def getData(filename: str)-> dict:
         f.close()
     return data
 
-def dataPreprocessing(data: dict) -> list:
-    # Coverting dict data to list of tuples
-    return list(map(lambda x: (x['id'], x['name'], x['quantity'], x['price']), data))
 
 def checkRangeInteger(txt: str, low: int, high: int)->bool:
     num = int(txt)

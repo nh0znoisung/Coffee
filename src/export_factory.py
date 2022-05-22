@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from ExportStrategy import *
+from export_strategy import *
 
 @dataclass
 class ExportFactory:

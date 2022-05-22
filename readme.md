@@ -5,7 +5,6 @@ This is a simple `console app` for customer in order to use the Coffee System se
 ### Requirements
 + `Python` >= 3.8.10
 + `Pip` >= 20.0.2
-+ **OS**: `Linux` 
 
 ### Install dependencies
 ``` sh
@@ -14,12 +13,14 @@ pip install -r requirements.txt
 
 ### Run program
 ``` sh
-python3 CoffeeSystem.py
+cd src
+python3 main.py
 ```
 
 ### Testing
 ``` sh
-coverage run -m unittest TestCoffeeSystem
+cd test
+coverage run -m unittest test
 coverage report -m
 coverage html
 ```
@@ -134,30 +135,14 @@ In Python case, these are some recommendation about naming covention for this pr
 - **Other names** need to write as `lowercase_separated_by_underscores`
 - **Private attributes** need to write with the prefix is 1 or 2 underscores such as `__instance`, `_instance`,... Prefix with double underscores or more changes the behaviour in classes regarding to [Name mangling](https://en.wikipedia.org/wiki/Name_mangling#Python). Moreover, prefix and postfix with double underscores are indented as `Magic names` which fulfill special behaviour in Python object, *for example*, `__add__` can use by syntax **obj1.__add__(obj2)** or **obj1 + obj2**.
 - Always use `self` for first argument to instance methods. While we always use `cls` for first argument to class methods.
-- **Function/Variable/Package/Module** name should write as `snake-case`, all-lowercases, short. Apart from it, *Function* name should start by a verb.
+- **Function/Variable/Package/Module** name should write as `snake-case`, all-lowercases, short.
+- **Function** name should write `snake-case` or `mixedCase` and often start with a `verb`.
+## Unittest
+Due to this project was written by **Python3**, there are some library support for testing. In this pharse, I use library `unittest` and `coverage` to test and control the coverage of the test. At first, I will generate the other version for testing whole program by read file instead of interacting with command line.
+I have to test about syntax of command (error such as: Invalid input, Out of bound,...) and Whole program by reading line by line commands check the final results including: remaining data, cart list, total_price. But, the disadvantages is not check partial each function. Finally, after testing and checking by library, the coverage of the whole code is up to **86%**. The remaining can not checking may be the code that run directly by customer's input and the lack of testcases I have generated.
 
-## Demo => Video
+![](./images/coverage.png)
 
-Convention of code:
-danh từ, động từ
-cách đặt tên file
-
-Documentation
-
-Coverage > 80%
-
-## Unittest => Unit-test + Coverage-python
-Test từng hàm, ko phải cả class
-khôi phục lại main
-
-Test tổng tiền
-Input nhập vào -> ValueError(out of rangec  )
-data còn lại
-
-Nhược điểm
-Thiếu tương tác với người dùng, trong thực thi vẫn chưa cho khách hàng hủy đơn + thay đổi liều lượng + Xem các Instruction nâng cao như thoat thoátthoát khỏi hệ thống, 
-
-Timer
 
 ## Future improvement
 + We can extend the instruction, such as enter `Q` to quit the program instantly, enter `H` for showing the instruction, enter `C` to show all the customer's cart up to now,...

@@ -1,15 +1,14 @@
 from termcolor import colored, cprint
-from GetData import getData
-import StatusVisitor
-from ExportFactory import *
-from ExportStrategy import *
-from BillExport import BillExport
-from PrintLibrary import *
-from GetData import *
-from PrintProductVisitor import *
+from data_preprocessing import getData
+import status_visitor
+from export_strategy import *
+from export_factory import *
+from bill_export import BillExport
+from print_product_visitor import *
+from print_library import *
 from contextlib import contextmanager
 import sys, os
-from ErrorChecker import *
+from error_checker import *
 
 
 # Silent mode
@@ -30,6 +29,10 @@ class CoffeeSystem:
     file = None
 
     def __init__(self, filename: str = None):
+        status_visitor.is_disable = True
+        status_visitor.cas = None
+        self.data = getData(FILE_DATA)
+        self.cart = []
         if filename is not None:
             self.file_mode = True
             self.file = open(filename, "r")
@@ -37,8 +40,6 @@ class CoffeeSystem:
     def __del__(self):
         if self.file_mode:
             self.file.close()
-        StatusVisitor.cas = None
-        StatusVisitor.is_disable = True
         self.cart = []
         self.data = None
         self.file_mode = False
@@ -192,7 +193,7 @@ class CoffeeSystem:
                     chatapp_instance = MessengerFactory.getInstance()
                     chatapp_strategy = chatapp_instance.createStrategy(id) 
                 
-                StatusVisitor.cas = chatapp_strategy # Set strategy
+                status_visitor.cas = chatapp_strategy # Set strategy
                 return
                 
         
@@ -290,13 +291,15 @@ class CoffeeSystem:
 
         PrintCart(self.cart, total_price).accept(PrintMenu())
 
-        StatusVisitor.sendStatus() # Timer starts here
+        status_visitor.sendStatus() # Timer starts here
         is_send_status = self.isSendStatusOrder()
         if is_send_status:
-            StatusVisitor.is_disable = False
+            status_visitor.is_disable = False
             self.chooseMethodExportStatus()
+            if self.file_mode:
+                status_visitor.cancelStatus()
         else:
-            StatusVisitor.cancelStatus()
+            status_visitor.cancelStatus()
         
         is_print_bill = self.isPrintBill()
         if is_print_bill:
